@@ -12,9 +12,19 @@ export default function TravelGallery({ refresh }) {
     setError('');
 
     try {
+      // Get current user first
+      const { data: userData } = await insforge.auth.getCurrentUser();
+      if (!userData?.user?.id) {
+        setError('You must be logged in to view your travel records');
+        setLoading(false);
+        return;
+      }
+
+      // Query only current user's records
       const { data, error } = await insforge.database
         .from('travel_records')
         .select('*')
+        .eq('user_id', userData.user.id)  // 🔒 Only show current user's data
         .order('travel_date', { ascending: false });
 
       if (error) {

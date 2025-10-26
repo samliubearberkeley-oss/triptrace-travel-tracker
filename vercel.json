@@ -1,4 +1,8 @@
 {
+  "buildCommand": "npm run build",
+  "env": {
+    "VITE_INSFORGE_URL": "https://r7qhf8dm.us-east.insforge.app"
+  },
   "rewrites": [
     {
       "source": "/(.*)",

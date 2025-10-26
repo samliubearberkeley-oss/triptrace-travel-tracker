@@ -1,8 +1,12 @@
 import { createClient } from '@insforge/sdk';
 
-// Initialize InsForge client
+// Initialize InsForge client with fallback URL
+const INSFORGE_URL = import.meta.env.VITE_INSFORGE_URL || 'https://r7qhf8dm.us-east.insforge.app';
+
+console.log('Initializing InsForge client with URL:', INSFORGE_URL);
+
 export const insforge = createClient({
-  baseUrl: import.meta.env.VITE_INSFORGE_URL
+  baseUrl: INSFORGE_URL
 });
 
 // Check if user is authenticated

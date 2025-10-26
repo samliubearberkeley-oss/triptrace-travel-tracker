@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f5f5f5;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow: auto;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>InsForge OAuth Test</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Check InsForge Client</h2>
+        <button onclick="testClient()">Test Client Init</button>
+        <div id="client-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Test OAuth Configuration</h2>
+        <button onclick="testOAuthGoogle()">Test Google OAuth</button>
+        <button onclick="testOAuthGithub()">Test GitHub OAuth</button>
+        <div id="oauth-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Check Session</h2>
+        <button onclick="checkSession()">Check Current Session</button>
+        <div id="session-result" class="result"></div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@insforge/sdk@0.0.56/+esm';
+
+        const INSFORGE_URL = 'https://r7qhf8dm.us-east.insforge.app';
+        
+        window.insforge = createClient({
+            baseUrl: INSFORGE_URL
+        });
+
+        window.testClient = function() {
+            const result = document.getElementById('client-result');
+            try {
+                result.innerHTML = `<div class="success">✓ Client initialized successfully</div>
+<div>Base URL: ${INSFORGE_URL}</div>
+<div>Client object: ${JSON.stringify(Object.keys(window.insforge), null, 2)}</div>`;
+            } catch (err) {
+                result.innerHTML = `<div class="error">✗ Error: ${err.message}</div>`;
+            }
+        };
+
+        window.testOAuthGoogle = async function() {
+            const result = document.getElementById('oauth-result');
+            result.innerHTML = '<div>Testing Google OAuth...</div>';
+            
+            try {
+                console.log('Calling signInWithOAuth with:', {
+                    provider: 'google',
+                    redirectTo: window.location.origin,
+                    skipBrowserRedirect: true
+                });
+
+                const response = await window.insforge.auth.signInWithOAuth({
+                    provider: 'google',
+                    redirectTo: window.location.origin,
+                    skipBrowserRedirect: true
+                });
+
+                console.log('OAuth response:', response);
+
+                if (response.error) {
+                    result.innerHTML = `<div class="error">✗ OAuth Error: ${response.error.message || JSON.stringify(response.error)}</div>
+<div>Full response: ${JSON.stringify(response, null, 2)}</div>`;
+                } else if (response.data?.url) {
+                    result.innerHTML = `<div class="success">✓ OAuth URL received!</div>
+<div>URL: ${response.data.url}</div>
+<div>Provider: ${response.data.provider}</div>
+<div><strong>Click to test redirect:</strong> <a href="${response.data.url}" target="_blank">Open OAuth URL</a></div>`;
+                } else {
+                    result.innerHTML = `<div class="error">✗ No URL in response</div>
+<div>Full response: ${JSON.stringify(response, null, 2)}</div>`;
+                }
+            } catch (err) {
+                console.error('OAuth test error:', err);
+                result.innerHTML = `<div class="error">✗ Exception: ${err.message}</div>
+<div>Stack: ${err.stack}</div>`;
+            }
+        };
+
+        window.testOAuthGithub = async function() {
+            const result = document.getElementById('oauth-result');
+            result.innerHTML = '<div>Testing GitHub OAuth...</div>';
+            
+            try {
+                const response = await window.insforge.auth.signInWithOAuth({
+                    provider: 'github',
+                    redirectTo: window.location.origin,
+                    skipBrowserRedirect: true
+                });
+
+                if (response.error) {
+                    result.innerHTML = `<div class="error">✗ OAuth Error: ${response.error.message || JSON.stringify(response.error)}</div>`;
+                } else if (response.data?.url) {
+                    result.innerHTML = `<div class="success">✓ OAuth URL received!</div>
+<div>URL: ${response.data.url}</div>
+<div><strong>Click to test redirect:</strong> <a href="${response.data.url}" target="_blank">Open OAuth URL</a></div>`;
+                } else {
+                    result.innerHTML = `<div class="error">✗ No URL in response</div>
+<div>Response: ${JSON.stringify(response, null, 2)}</div>`;
+                }
+            } catch (err) {
+                result.innerHTML = `<div class="error">✗ Exception: ${err.message}</div>`;
+            }
+        };
+
+        window.checkSession = async function() {
+            const result = document.getElementById('session-result');
+            try {
+                const session = window.insforge.auth.getCurrentSession();
+                const user = await window.insforge.auth.getCurrentUser();
+                
+                result.innerHTML = `<div><strong>Session:</strong></div>
+<div>${JSON.stringify(session, null, 2)}</div>
+<div><strong>User:</strong></div>
+<div>${JSON.stringify(user, null, 2)}</div>`;
+            } catch (err) {
+                result.innerHTML = `<div class="error">✗ Error: ${err.message}</div>`;
+            }
+        };
+
+        // Auto-check session on load
+        window.addEventListener('load', () => {
+            window.checkSession();
+        });
+    </script>
+</body>
+</html>
+

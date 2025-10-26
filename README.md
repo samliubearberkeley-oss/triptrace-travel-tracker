@@ -4,13 +4,11 @@ A beautiful, cinematic travel tracking application built with React, Vite, and I
 
 ## 🌐 Live Demo
 
-**Production URL**: https://traveltracker-2pvbyx4nl-vibe-coders-projects-5502c553.vercel.app
-
-**Alternative Access**: https://traveltracker-phi.vercel.app
+**🚀 Main Production URL**: https://traveltracker-phi.vercel.app
 
 **GitHub Repository**: https://github.com/samliubearberkeley-oss/triptrace-travel-tracker
 
-> **Note**: The app is publicly accessible without login requirements. Anyone can visit and use the application.
+> **✅ Public Access**: The app is publicly accessible without any login requirements. Anyone can visit and use the application immediately!
 
 ## ✨ Features
 

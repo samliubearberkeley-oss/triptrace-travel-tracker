@@ -7,13 +7,23 @@ export const insforge = createClient({
 
 // Check if user is authenticated
 export const getCurrentUser = async () => {
-  const { data, error } = await insforge.auth.getCurrentUser();
-  return { data, error };
+  try {
+    const { data, error } = await insforge.auth.getCurrentUser();
+    return { data, error };
+  } catch (error) {
+    console.error('Error getting current user:', error);
+    return { data: null, error };
+  }
 };
 
 // Get current session from local storage
 export const getSession = () => {
-  const { data } = insforge.auth.getCurrentSession();
-  return data?.session;
+  try {
+    const { data } = insforge.auth.getCurrentSession();
+    return data?.session;
+  } catch (error) {
+    console.error('Error getting session:', error);
+    return null;
+  }
 };
 

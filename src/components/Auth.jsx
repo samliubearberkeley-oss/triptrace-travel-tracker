@@ -40,18 +40,18 @@ export default function Auth({ onAuthSuccess }) {
     try {
       const { data, error } = await insforge.auth.signInWithOAuth({
         provider,
-        redirectTo: window.location.origin,
-        skipBrowserRedirect: true
+        options: {
+          redirectTo: `${window.location.origin}/`
+        }
       });
 
       if (error) {
         setError(error.message || 'OAuth failed');
-      } else if (data?.url) {
-        window.location.href = data.url;
+        setLoading(false);
       }
+      // Browser will redirect automatically, no need to handle data.url
     } catch (err) {
-      setError(err.message || 'An error occurred');
-    } finally {
+      setError(err.message || 'An unexpected error occurred during OAuth initialization');
       setLoading(false);
     }
   };

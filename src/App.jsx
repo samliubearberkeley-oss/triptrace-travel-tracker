@@ -13,7 +13,22 @@ function App() {
   const [refreshGallery, setRefreshGallery] = useState(0);
 
   useEffect(() => {
-    checkUser();
+    // Handle OAuth callback
+    const handleOAuthCallback = async () => {
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const accessToken = hashParams.get('access_token');
+      
+      if (accessToken) {
+        // OAuth callback detected, wait a moment for session to be established
+        await new Promise(resolve => setTimeout(resolve, 500));
+        // Clear the hash from URL
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+      
+      await checkUser();
+    };
+
+    handleOAuthCallback();
   }, []);
 
   const checkUser = async () => {

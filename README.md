@@ -1,6 +1,12 @@
-# Travel Tracker 🌍
+# TripTrace - Travel Tracker 🌍
 
-A beautiful React + Vite app for tracking your travel memories with photos, locations, dates, and notes. Built with InsForge as the backend.
+A beautiful, cinematic travel tracking application built with React, Vite, and InsForge backend. Track your journeys with photos, GPS coordinates, and create a visual timeline of your adventures.
+
+## 🌐 Live Demo
+
+**Production URL**: https://traveltracker-iqkjcwwxr-vibe-coders-projects-5502c553.vercel.app
+
+**GitHub Repository**: https://github.com/samliubearberkeley-oss/triptrace-travel-tracker
 
 ## ✨ Features
 

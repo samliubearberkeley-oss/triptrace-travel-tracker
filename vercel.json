@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "env": {
+    "VITE_INSFORGE_URL": "https://r7qhf8dm.us-east.insforge.app",
+    "VITE_INSFORGE_ANON_KEY": "your-anon-key-here"
+  }
+}

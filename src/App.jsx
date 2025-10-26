@@ -15,16 +15,23 @@ function App() {
   useEffect(() => {
     // Handle OAuth callback
     const handleOAuthCallback = async () => {
+      // Check for OAuth callback in URL hash
       const hashParams = new URLSearchParams(window.location.hash.substring(1));
       const accessToken = hashParams.get('access_token');
+      const refreshToken = hashParams.get('refresh_token');
       
       if (accessToken) {
-        // OAuth callback detected, wait a moment for session to be established
-        await new Promise(resolve => setTimeout(resolve, 500));
-        // Clear the hash from URL
+        console.log('OAuth callback detected, establishing session...');
+        
+        // Give the SDK time to process and store the OAuth tokens
+        // The SDK automatically handles token storage
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Clear the hash from URL for security and cleanliness
         window.history.replaceState(null, '', window.location.pathname);
       }
       
+      // Check user authentication status
       await checkUser();
     };
 
